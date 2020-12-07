@@ -1,0 +1,213 @@
+{
+  "sql_script": [
+    {
+      "unit_statement": [
+        {
+          "unit_statement_body": [
+            {
+              "data_manipulation_language_statements": [
+                {
+                  "select_statement": [
+                    {
+                      "ignoreSubquery": [
+                        {
+                          "query_block": [
+                            {
+                              "type": 460,
+                              "text": "select"
+                            },
+                            {
+                              "ignoreTableview_name": [
+                                {
+                                  "tableview_name": [
+                                    {
+                                      "dot_id": [
+                                        {
+                                          "id_expression": [
+                                            {
+                                              "regular_id": [
+                                                {
+                                                  "type": 4,
+                                                  "text": "a"
+                                                }
+                                              ]
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "from_clause": [
+                                {
+                                  "type": 196,
+                                  "text": "from"
+                                },
+                                {
+                                  "tableRefSimple": [
+                                    {
+                                      "table_ref_aux": [
+                                        {
+                                          "dml_table_expression_clause": [
+                                            {
+                                              "tableview_name": [
+                                                {
+                                                  "dot_id": [
+                                                    {
+                                                      "id_expression": [
+                                                        {
+                                                          "regular_id": [
+                                                            {
+                                                              "type": 676,
+                                                              "text": "b"
+                                                            }
+                                                          ]
+                                                        }
+                                                      ]
+                                                    }
+                                                  ]
+                                                }
+                                              ]
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": 657,
+      "text": ";"
+    },
+    {
+      "unit_statement": [
+        {
+          "unit_statement_body": [
+            {
+              "create_package": [
+                {
+                  "type": 99,
+                  "text": "create"
+                },
+                {
+                  "type": 359,
+                  "text": "or"
+                },
+                {
+                  "type": 426,
+                  "text": "replace"
+                },
+                {
+                  "type": 369,
+                  "text": "package"
+                },
+                {
+                  "package_spec": [
+                    {
+                      "package_name": [
+                        {
+                          "r_id": [
+                            {
+                              "dot_id": [
+                                {
+                                  "id_expression": [
+                                    {
+                                      "regular_id": [
+                                        {
+                                          "type": 676,
+                                          "text": "test_package"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": 20,
+                      "text": "as"
+                    },
+                    {
+                      "package_obj_spec": [
+                        {
+                          "variable_declaration": [
+                            {
+                              "variable_name": [
+                                {
+                                  "dot_id": [
+                                    {
+                                      "id_expression": [
+                                        {
+                                          "regular_id": [
+                                            {
+                                              "type": 676,
+                                              "text": "c_mobile_service_id$i"
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "type": 87,
+                              "text": "constant"
+                            },
+                            {
+                              "type_spec": [
+                                {
+                                  "datatype": [
+                                    {
+                                      "native_datatype_element": [
+                                        {
+                                          "type": 239,
+                                          "text": "integer"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "default_value_part": [
+                                {
+                                  "type": 654,
+                                  "text": ":\u003d"
+                                },
+                                {
+                                  "ignoreExpr": [
+                                    {
+                                      "ignoreBinaryExpr": [
+                                        {
+                                          "ignoreUnaryExpr": [
+                                            {
+                                              "atom": [
+                                                {
+                                                  "constant": [
+                                                    {
+                                                      "numeric": [
+      
