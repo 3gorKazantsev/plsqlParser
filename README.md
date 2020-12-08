@@ -5,8 +5,8 @@
 ---
 Перед тем как запускать метод `parse(input, output)` вы должны сгенерировать
 файлы в каталог grammar. Для этого нужно:
-- установить плагин ANTLRv4 в вашу IDEA
-- правый клик по PLSQL.g4:
+- Установить плагин ANTLRv4 в вашу IDEA
+- Правый клик по PLSQL.g4:
     * Configure ANTLR...<br>
         Output directory - `.\plsqlParser\src\main\java`<br>
         Location of imported grammar -  `.\plsqlParser\src\main\java\com\ekazantsev\grammar`<br>
