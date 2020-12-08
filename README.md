@@ -30,7 +30,6 @@ P.S. Данная ошибка никак не влияет на компиля�
 
 Просмотр дерева
 ---
-
 Чтобы просмотреть построенное дерево:
 - Заходим в файл грамматики (PLSQL.g4)
 - Правый клик по `sql_script()` > Test Rule sqlscript
@@ -40,3 +39,4 @@ Dependencies
 ---
 - [antlr 4.9](https://mvnrepository.com/artifact/org.antlr/antlr4/4.9)
 - [gson 2.8.6](https://mvnrepository.com/artifact/com.google.code.gson/gson/2.8.6)
+- [jcommander 1.78](https://mvnrepository.com/artifact/com.beust/jcommander/1.78)

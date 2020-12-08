@@ -1,5 +1,6 @@
 package com.ekazantsev.app;
 
+import com.beust.jcommander.JCommander;
 import com.ekazantsev.grammar.PLSQLLexer;
 import com.ekazantsev.grammar.PLSQLParser;
 import org.antlr.v4.runtime.CharStream;
@@ -11,10 +12,14 @@ import java.io.IOException;
 
 public class Parser {
     public static void main(String[] args) {
-        String input = "G:/Projects/Java/plsqlParser/src/main/resources/sql.sql";
-        String output = "G:/Projects/Java/plsqlParser/src/main/resources/result.json";
-
-        parse(input, output);
+        // штука, чтобы воспринимались параметры в командной строке
+        Args arguments = new Args();
+        JCommander.newBuilder()
+                .addObject(arguments)
+                .build()
+                .parse(args);
+        // запуск парсера с входными параметрами
+        arguments.run();
     }
 
     public static void parse(String inputFile, String outputFile) {
