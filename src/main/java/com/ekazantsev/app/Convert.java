@@ -25,13 +25,13 @@ public class Convert {
         }
     }
 
-    public static Map<String, Object> toMap(ParseTree tree) {
+    private static Map<String, Object> toMap(ParseTree tree) {
         Map<String, Object> map = new LinkedHashMap<>();
         traverse(tree, map);
         return map;
     }
 
-    public static void traverse(ParseTree tree, Map<String, Object> map) {
+    private static void traverse(ParseTree tree, Map<String, Object> map) {
         if (tree instanceof TerminalNodeImpl) {
             Token token = ((TerminalNodeImpl) tree).getSymbol();
             map.put("type", token.getType());
