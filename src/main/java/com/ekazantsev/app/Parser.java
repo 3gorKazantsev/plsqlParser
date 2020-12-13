@@ -114,7 +114,7 @@ public class Parser {
                 }
 
                 // сохраняем дерево
-                Convert.saveTree(mainTree, outputFile);
+                Convert.saveTree(resultTree, outputFile);
             }
         } catch (IOException e) {
             e.printStackTrace();
