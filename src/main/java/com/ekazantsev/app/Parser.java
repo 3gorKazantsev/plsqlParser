@@ -1,10 +1,9 @@
 package com.ekazantsev.app;
 
-import com.ekazantsev.grammar.PLSQLLexer;
-import com.ekazantsev.grammar.PLSQLParser;
+import com.ekazantsev.grammar.PlSqlLexer;
+import com.ekazantsev.grammar.PlSqlParser;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.TerminalNode;
 
 import java.io.File;
 import java.io.IOException;
@@ -45,7 +44,7 @@ public class Parser {
             if (type.equals(".sql")) {
                 // подготовка к созданию дерева:
                 // 1. раскладываем файл на строки, каждую строку кладем в список, как отдельный элемент
-                List<String> listStr = Files.readAllLines(Paths.get(inputFile), Charset.defaultCharset());
+                List<String> listStr = Files.readAllLines(Paths.get(inputFile), /*Charset.defaultCharset()*/ Charset.forName("Windows-1251"));
                 // 1. список преобразовываем в строку
                 StringBuilder fileString = new StringBuilder();
                 for (String str : listStr) {
@@ -53,13 +52,15 @@ public class Parser {
                 }
                 // 1. кладем готовую строку в CharStream
                 CharStream cs = CharStreams.fromString(fileString.toString());
+                CaseChangingCharStream upper = new CaseChangingCharStream(cs, true);
                 // 2. 3. 4. создаем лексеры, токены и парсеры
-                PLSQLLexer lexer = new PLSQLLexer(cs);
+                PlSqlLexer lexer = new PlSqlLexer(upper);
                 CommonTokenStream tokens = new CommonTokenStream(lexer);
-                PLSQLParser parser = new PLSQLParser(tokens);
+                PlSqlParser parser = new PlSqlParser(tokens);
 
                 // создаем дерево
                 ParseTree mainTree = parser.sql_script();
+
                 // массив, в котором будут храниться дети
                 ArrayList<ParseTree> listTree = new ArrayList<>();
                 // дерево, в котом будут храниться правильные дети
@@ -67,12 +68,12 @@ public class Parser {
 
                 // обработка: не содержит ли ребенок ошибки
                 for (int i = 0; i < mainTree.getChildCount(); i++) {
-                    // если текущий ребенок созданного дерева содержит .PLSQLParser$Sql_plus_commandContext (/)
-                    // или содержит .ErrorNodeImpl (show errors)
-                    if (mainTree.getChild(i).getClass().toString().contains(".PLSQLParser$Sql_plus_commandContext") ||
-                            mainTree.getChild(i).getClass().toString().contains(".ErrorNodeImpl")) {
+                    // если текущий ребенок созданного дерева содержит ошибки
+                    if (mainTree.getChild(i).getChild(0) == null) {
 
-                        // в строку записываем
+
+
+                        /*// в строку записываем
                         ParseTree child = mainTree.getChild(i);
                         String payload = child.getPayload().toString();
 
@@ -99,14 +100,14 @@ public class Parser {
                         // обновляем CharStream готовой строкой
                         cs = CharStreams.fromString(fileString.toString());
                         // обновляем лексеры, токены и парсеры
-                        lexer = new PLSQLLexer(cs);
+                        lexer = new PlSqlLexer(cs);
                         tokens = new CommonTokenStream(lexer);
-                        parser = new PLSQLParser(tokens);
+                        parser = new PlSqlParser(tokens);
 
                         // обновляем дерево
                         mainTree = parser.sql_script();
 
-                        i = -1;
+                        i = -1;*/
                     } else {
                         listTree.add(mainTree.getChild(i));
                         resultTree.addAnyChild(mainTree.getChild(i));

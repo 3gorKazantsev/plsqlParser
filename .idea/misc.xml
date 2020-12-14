@@ -13,6 +13,26 @@
           <option name="language" value="" />
           <option name="generateVisitor" value="true" />
         </PerGrammarGenerationSettings>
+        <PerGrammarGenerationSettings>
+          <option name="fileName" value="$PROJECT_DIR$/src/main/java/com/ekazantsev/grammar/PlSqlLexer.g4" />
+          <option name="autoGen" value="true" />
+          <option name="outputDir" value="G:\Projects\Java\plsqlParser\src\main\java" />
+          <option name="libDir" value="G:\Projects\Java\plsqlParser\src\main\java\com\ekazantsev\grammar" />
+          <option name="encoding" value="" />
+          <option name="pkg" value="" />
+          <option name="language" value="" />
+          <option name="generateVisitor" value="true" />
+        </PerGrammarGenerationSettings>
+        <PerGrammarGenerationSettings>
+          <option name="fileName" value="$PROJECT_DIR$/src/main/java/com/ekazantsev/grammar/PlSqlParser.g4" />
+          <option name="autoGen" value="true" />
+          <option name="outputDir" value="G:\Projects\Java\plsqlParser\src\main\java" />
+          <option name="libDir" value="G:\Projects\Java\plsqlParser\src\main\java\com\ekazantsev\grammar" />
+          <option name="encoding" value="" />
+          <option name="pkg" value="" />
+          <option name="language" value="" />
+          <option name="generateVisitor" value="true" />
+        </PerGrammarGenerationSettings>
       </list>
     </option>
   </component>

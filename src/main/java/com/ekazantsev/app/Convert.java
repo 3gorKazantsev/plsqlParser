@@ -20,6 +20,7 @@ public class Convert {
     private static final Gson PRETTY_PRINT_GSON = new GsonBuilder().setPrettyPrinting().create();
     private static final Gson GSON = new Gson();
 
+    // метод, который сохраняет дерево в JSON файл
     public static void saveTree(ParseTree tree, String path) {
         try (FileWriter file = new FileWriter(path)) {
             file.write(toJson(tree));
