@@ -24,7 +24,7 @@ public class Convert {
     public static void saveTree(ParseTree tree, String path) {
         try {
             FileWriter file = new FileWriter(path);
-            file.write(toJson(tree));
+            file.write(toJson(tree, false));
             file.flush();
             file.close();
         } catch (IOException e) {
@@ -52,6 +52,7 @@ public class Convert {
             Token token = ((TerminalNodeImpl) tree).getSymbol();
             map.put("type", token.getType());
             map.put("text", token.getText());
+            map.put("line", token.getLine());
         } else {
             List<Map<String, Object>> children = new ArrayList<>();
             String name = tree.getClass().getSimpleName().replaceAll("Context$", "");

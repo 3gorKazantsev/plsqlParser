@@ -77,8 +77,7 @@ public class Parser {
                 // массив, в котором будут храниться дети
                 ArrayList<ParseTree> listTree = new ArrayList<>();
                 // дерево, в котом будут храниться правильные дети
-                ParserRuleContext resultTree = ParserRuleContext.EMPTY;
-                resultTree.children = new ArrayList<>();
+                ParserRuleContext resultTree = new ParserRuleContext();
 
                 // обработка: не содержит ли ребенок ошибки
                 for (int i = 0; i < mainTree.getChildCount(); i++) {
