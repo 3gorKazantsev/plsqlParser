@@ -2,6 +2,7 @@ package com.ekazantsev.app;
 
 import com.ekazantsev.grammar.PlSqlLexer;
 import com.ekazantsev.grammar.PlSqlParser;
+import com.google.gson.GsonBuilder;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.ParseTree;
 
@@ -35,6 +36,8 @@ public class Parser {
                 continue;
             }
 
+            System.out.println(entry.getPath());
+
             // создаем путь до будущего JSON файла
             String pathToJson = makeJsonPath(entry);
 
@@ -42,7 +45,8 @@ public class Parser {
             parse(entry.getPath(), pathToJson);
 
             // удаляем sql файл
-            entry.deleteOnExit();
+            boolean del = entry.delete();
+            System.out.println(del);
         }
     }
 
@@ -74,6 +78,7 @@ public class Parser {
                 ArrayList<ParseTree> listTree = new ArrayList<>();
                 // дерево, в котом будут храниться правильные дети
                 ParserRuleContext resultTree = ParserRuleContext.EMPTY;
+                resultTree.children = new ArrayList<>();
 
                 // обработка: не содержит ли ребенок ошибки
                 for (int i = 0; i < mainTree.getChildCount(); i++) {

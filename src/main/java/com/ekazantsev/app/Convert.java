@@ -22,9 +22,11 @@ public class Convert {
 
     // метод, который сохраняет дерево в JSON файл
     public static void saveTree(ParseTree tree, String path) {
-        try (FileWriter file = new FileWriter(path)) {
+        try {
+            FileWriter file = new FileWriter(path);
             file.write(toJson(tree));
             file.flush();
+            file.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
