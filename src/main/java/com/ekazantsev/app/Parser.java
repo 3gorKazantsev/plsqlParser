@@ -15,6 +15,16 @@ import java.util.List;
 
 public class Parser {
 
+    private static List<String> listStr = new ArrayList<>();
+    private static StringBuilder fileString = new StringBuilder();
+
+    private static CharStream cs = null;
+    private static CaseChangingCharStream upper = null;
+    private static PlSqlLexer lexer = null;
+    private static CommonTokenStream tokens = null;
+    private static PlSqlParser parser = null;
+    private static ParseTree mainTree = null;
+
     // метод, который обрабатывает входную папку
     public static void processFolder(File folder) {
         File[] folderEntries = folder.listFiles();
@@ -44,22 +54,21 @@ public class Parser {
             if (type.equals(".sql")) {
                 // подготовка к созданию дерева:
                 // 1. раскладываем файл на строки, каждую строку кладем в список, как отдельный элемент
-                List<String> listStr = Files.readAllLines(Paths.get(inputFile), /*Charset.defaultCharset()*/ Charset.forName("Windows-1251"));
+                listStr = Files.readAllLines(Paths.get(inputFile), Charset.forName("Windows-1251"));
                 // 1. список преобразовываем в строку
-                StringBuilder fileString = new StringBuilder();
+                fileString = new StringBuilder();
                 for (String str : listStr) {
                     fileString.append(str).append("\n");
                 }
                 // 1. кладем готовую строку в CharStream
-                CharStream cs = CharStreams.fromString(fileString.toString());
-                CaseChangingCharStream upper = new CaseChangingCharStream(cs, true);
+                cs = CharStreams.fromString(fileString.toString());
+                upper = new CaseChangingCharStream(cs, true);
                 // 2. 3. 4. создаем лексеры, токены и парсеры
-                PlSqlLexer lexer = new PlSqlLexer(upper);
-                CommonTokenStream tokens = new CommonTokenStream(lexer);
-                PlSqlParser parser = new PlSqlParser(tokens);
-
+                lexer = new PlSqlLexer(upper);
+                tokens = new CommonTokenStream(lexer);
+                parser = new PlSqlParser(tokens);
                 // создаем дерево
-                ParseTree mainTree = parser.sql_script();
+                mainTree = parser.sql_script();
 
                 // массив, в котором будут храниться дети
                 ArrayList<ParseTree> listTree = new ArrayList<>();
@@ -69,45 +78,61 @@ public class Parser {
                 // обработка: не содержит ли ребенок ошибки
                 for (int i = 0; i < mainTree.getChildCount(); i++) {
                     // если текущий ребенок созданного дерева содержит ошибки
-                    if (mainTree.getChild(i).getChild(0) == null) {
+                    // (дети ребенка == null и payload ребенка не содержит "[@"
+                    // (это значит ребенок не <EOF> или ;) )
+                    if (mainTree.getChild(i).getChild(0) == null &&
+                            !mainTree.getChild(i).getPayload().toString().contains("[@")) {
 
+                        if (i != 0) {
+                            // получаем предшествующего ребенка ребенку с ошибкой
+                            ParseTree prevChild = mainTree.getChild(i - 1);
+                            // получаем payload из prevChild
+                            String payload = prevChild.getPayload().toString();
+                            // временный ребенок для получения номера строки
+                            ParseTree tmpChild = prevChild;
 
+                            // получаем payload строки prevChild
+                            while (!payload.contains("[@")) {
+                                // количество детей ребенка
+                                int childCount = tmpChild.getChildCount();
+                                // получаем последнего ребенка ребенка
+                                tmpChild = tmpChild.getChild(childCount - 1);
+                                // берем payload из prevChild
+                                payload = tmpChild.getPayload().toString();
+                            }
+                            // записываем номер строки prevChild
+                            int line = getLineByPayload(payload);
 
-                        /*// в строку записываем
-                        ParseTree child = mainTree.getChild(i);
-                        String payload = child.getPayload().toString();
+                            // в line записываем номер строки с ошибкой
+                            while (listStr.get(line + 1).trim().length() == 0){
+                                line++;
+                            }
+                            line++;
 
-                        // получаем полезную нагрузку из ребенка, в котором ошибка
-                        while (!payload.contains("[@")) {
-                            child = child.getChild(0);
-                            payload = child.getPayload().toString();
+                            // удаляем все строки до строки с ошибкой (включительно) из массива со строками SQL файла
+                            for (int j = 0; j <= line; j++) {
+                                listStr.remove(0);
+                            }
+
+                            // обновляем строку, которая содержит SQL файл в текстовом виде
+                            // и список с этим же файлом
+                            refreshString();
+
+                            // обновляем CharStream, лексер, токены, парсер
+                            // и дерево
+                            refreshTree();
+
+                            // обнуляем счетчик
+                            i = -1;
+                        } else {
+                            // обновляем строку, которая содержит SQL файл в текстовом виде
+                            // и список с этим же файлом
+                            refreshString();
+
+                            // обновляем CharStream, лексер, токены, парсер
+                            // и дерево
+                            refreshTree();
                         }
-
-                        // вытягиваем строку из полезной нагрузки
-                        int line = getLineByPayload(payload);
-
-                        // удаляем все строки до строки с ошибкой (включительно)
-                        for (int j = 0; j < line; j++) {
-                            listStr.remove(0);
-                        }
-
-                        // очищаем строку
-                        fileString.delete(0, fileString.length());
-                        // оставшиеся строки в листе преобразовываем в строку
-                        for (String str : listStr) {
-                            fileString.append(str).append("\n");
-                        }
-                        // обновляем CharStream готовой строкой
-                        cs = CharStreams.fromString(fileString.toString());
-                        // обновляем лексеры, токены и парсеры
-                        lexer = new PlSqlLexer(cs);
-                        tokens = new CommonTokenStream(lexer);
-                        parser = new PlSqlParser(tokens);
-
-                        // обновляем дерево
-                        mainTree = parser.sql_script();
-
-                        i = -1;*/
                     } else {
                         listTree.add(mainTree.getChild(i));
                         resultTree.addAnyChild(mainTree.getChild(i));
@@ -143,5 +168,27 @@ public class Parser {
         int line = Integer.parseInt(payload.substring(chars2 + 2, chars3));
 
         return line;
+    }
+
+    // метод, который обновляет строку и список строк
+    private static void refreshString() {
+        // очищаем строку полностью, в которой хранится SQL файл в текстовом виде
+        fileString.delete(0, fileString.length());
+        // оставшиеся строки в листе преобразовываем в строку
+        for (String str : listStr) {
+            fileString.append(str).append("\n");
+        }
+    }
+
+    private static void refreshTree() {
+        // обновляем CharStream готовой строкой
+        cs = CharStreams.fromString(fileString.toString());
+        upper = new CaseChangingCharStream(cs, true);
+        // обновляем лексеры, токены и парсеры
+        lexer = new PlSqlLexer(upper);
+        tokens = new CommonTokenStream(lexer);
+        parser = new PlSqlParser(tokens);
+        // обновляем дерево
+        mainTree = parser.sql_script();
     }
 }
