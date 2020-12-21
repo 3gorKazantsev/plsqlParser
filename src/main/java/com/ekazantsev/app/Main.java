@@ -17,6 +17,7 @@ public class Main {
 
     // метод, который обрабатывает командную строку
     private static void processCmdOption(String[] args) throws IOException {
+        Parser parser = new Parser();
 
         // создание ключей -io и -d ---------------------------------------------------------------------
         Options options = new Options();
@@ -26,10 +27,10 @@ public class Main {
                 "output .json file or directory");
 
         // парсинг командной строки ---------------------------------------------------------------------
-        CommandLineParser parser = new DefaultParser();
+        CommandLineParser cmdParser = new DefaultParser();
         CommandLine cmd = null;
         try {
-            cmd = parser.parse(options, args);
+            cmd = cmdParser.parse(options, args);
         } catch (ParseException e) {
             HelpFormatter formatter = new HelpFormatter();
             formatter.printHelp("plsqlParser", options);
@@ -41,7 +42,7 @@ public class Main {
             // если input - sql файл, а output - Json файл
             if (cmd.getOptionValue("i").contains(".sql") && cmd.getOptionValue("o").contains(".json")) {
                 // запускаем парсер
-                Parser.parse(cmd.getOptionValue("i"), cmd.getOptionValue("o"));
+                parser.parse(cmd.getOptionValue("i"), cmd.getOptionValue("o"));
             }
 
             // если input - папка (если input не содержит .sql), output - папка (если input не содержит .json),
@@ -56,7 +57,7 @@ public class Main {
                 FileUtils.copyDirectory(inputFolder, outputFolder);
 
                 // запускаем метод, который обходит входную папку и создает выходную папку
-                Parser.processFolder(outputFolder);
+                parser.processFolder(outputFolder);
             }
         }
 
@@ -73,7 +74,7 @@ public class Main {
                 FileUtils.copyDirectory(inputFolder, outputFolder);
 
                 // запускаем метод, который обходит входную папку и создает выходную папку
-                Parser.processFolder(outputFolder);
+                parser.processFolder(outputFolder);
             }
         }
     }

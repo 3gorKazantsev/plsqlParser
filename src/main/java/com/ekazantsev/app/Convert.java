@@ -32,10 +32,6 @@ public class Convert {
         }
     }
 
-    public static String toJson(ParseTree tree) {
-        return toJson(tree, true);
-    }
-
     public static String toJson(ParseTree tree, boolean prettyPrint) {
         return prettyPrint ? PRETTY_PRINT_GSON.toJson(toMap(tree)) : GSON.toJson(toMap(tree));
     }

@@ -2,7 +2,6 @@ package com.ekazantsev.app;
 
 import com.ekazantsev.grammar.PlSqlLexer;
 import com.ekazantsev.grammar.PlSqlParser;
-import com.google.gson.GsonBuilder;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.ParseTree;
 
@@ -16,18 +15,18 @@ import java.util.List;
 
 public class Parser {
 
-    private static List<String> listStr = new ArrayList<>();
-    private static StringBuilder fileString = new StringBuilder();
+    private List<String> listStr = new ArrayList<>();
+    private StringBuilder fileString = new StringBuilder();
 
-    private static CharStream cs = null;
-    private static CaseChangingCharStream upper = null;
-    private static PlSqlLexer lexer = null;
-    private static CommonTokenStream tokens = null;
-    private static PlSqlParser parser = null;
-    private static ParseTree mainTree = null;
+    private CharStream cs = null;
+    private CaseChangingCharStream upper = null;
+    private PlSqlLexer lexer = null;
+    private CommonTokenStream tokens = null;
+    private PlSqlParser parser = null;
+    private ParseTree mainTree = null;
 
     // метод, который обрабатывает входную папку
-    public static void processFolder(File folder) {
+    public void processFolder(File folder) {
         File[] folderEntries = folder.listFiles();
 
         for (File entry : folderEntries) {
@@ -45,13 +44,12 @@ public class Parser {
             parse(entry.getPath(), pathToJson);
 
             // удаляем sql файл
-            boolean del = entry.delete();
-            System.out.println(del);
+            entry.delete();
         }
     }
 
     // метод, который строит ParseTree и сохраняет его JSON файл
-    public static void parse(String inputFile, String outputFile) {
+    public void parse(String inputFile, String outputFile) {
         try {
             // если последние символы входного файла - .sql - запускаем парсер
             String type = inputFile.substring(inputFile.length() - 4);
@@ -108,7 +106,7 @@ public class Parser {
                             int line = getLineByPayload(payload);
 
                             // в line записываем номер строки с ошибкой
-                            while (listStr.get(line + 1).trim().length() == 0){
+                            while (listStr.get(line + 1).trim().length() == 0) {
                                 line++;
                             }
                             line++;
@@ -122,8 +120,7 @@ public class Parser {
                             // и список с этим же файлом
                             refreshString();
 
-                            // обновляем CharStream, лексер, токены, парсер
-                            // и дерево
+                            // обновляем CharStream, лексер, токены, парсер и дерево
                             refreshTree();
 
                             // обнуляем счетчик
@@ -133,8 +130,7 @@ public class Parser {
                             // и список с этим же файлом
                             refreshString();
 
-                            // обновляем CharStream, лексер, токены, парсер
-                            // и дерево
+                            // обновляем CharStream, лексер, токены, парсер и дерево
                             refreshTree();
                         }
                     } else {
@@ -152,7 +148,7 @@ public class Parser {
     }
 
     // метод, которые создает путь до будущего JSON файла
-    private static String makeJsonPath(File entry) {
+    private String makeJsonPath(File entry) {
         // в pathToJson кладем путь до sql файла
         String pathToJson = entry.getPath();
         // удаляем последние 3 символа (sql)
@@ -164,7 +160,7 @@ public class Parser {
     }
 
     // метод, который вытягивает номер строки из parseTree.getPayload()
-    private static int getLineByPayload(String payload) {
+    private int getLineByPayload(String payload) {
         int chars1 = payload.indexOf(",<");
         payload = payload.substring(chars1);
         int chars2 = payload.indexOf(">,");
@@ -175,7 +171,7 @@ public class Parser {
     }
 
     // метод, который обновляет строку и список строк
-    private static void refreshString() {
+    private void refreshString() {
         // очищаем строку полностью, в которой хранится SQL файл в текстовом виде
         fileString.delete(0, fileString.length());
         // оставшиеся строки в листе преобразовываем в строку
@@ -184,7 +180,7 @@ public class Parser {
         }
     }
 
-    private static void refreshTree() {
+    private void refreshTree() {
         // обновляем CharStream готовой строкой
         cs = CharStreams.fromString(fileString.toString());
         upper = new CaseChangingCharStream(cs, true);
