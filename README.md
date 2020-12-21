@@ -51,6 +51,8 @@ P.S. Данная ошибка никак не влияет на компиля�
 
 Dependencies
 ---
+- [Grammars](https://github.com/antlr/grammars-v4/tree/master/sql/plsql)
+- [PlSqlLexerBase.java and PlSqlParserBase.java](https://github.com/antlr/grammars-v4/tree/master/sql/plsql/Java)
 - [antlr4 4.9](https://mvnrepository.com/artifact/org.antlr/antlr4/4.9)
 - [Gson 2.8.6](https://mvnrepository.com/artifact/com.google.code.gson/gson/2.8.6)
 - [Apache Commons CLI 1.4](https://mvnrepository.com/artifact/commons-cli/commons-cli/1.4)

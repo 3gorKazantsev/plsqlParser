@@ -4,6 +4,7 @@ import org.apache.commons.cli.*;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 
 public class Main {
@@ -43,13 +44,26 @@ public class Main {
             if (cmd.getOptionValue("i").contains(".sql") && cmd.getOptionValue("o").contains(".json")) {
                 // запускаем парсер
                 parser.parse(cmd.getOptionValue("i"), cmd.getOptionValue("o"));
+
+                //создаем txt файл с ошибками
+                String str = cmd.getOptionValue("i");
+                str = str.substring(0, str.length() - 4);
+                str = str + "Exceptions" + ".txt";
+                try {
+                    FileWriter file = new FileWriter(str);
+                    file.write(parser.stringExceptions.toString());
+                    file.flush();
+                    file.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
 
             // если input - папка (если input не содержит .sql), output - папка (если input не содержит .json),
             // input и output не равны
             if (!cmd.getOptionValue("i").contains(".sql") && !cmd.getOptionValue("o").contains(".json")
                     && !cmd.getOptionValue("i").equals(cmd.getOptionValue("o"))) {
-                // создаем новую папку по пути казанном в output
+                // создаем новую папку по пути указанном в output
                 // и копируем все ее содержимое
                 File inputFolder = new File(cmd.getOptionValue("i"));
                 String outputFolderPath = cmd.getOptionValue("o");
@@ -58,6 +72,19 @@ public class Main {
 
                 // запускаем метод, который обходит входную папку и создает выходную папку
                 parser.processFolder(outputFolder);
+
+                //создаем txt файл с ошибками
+                String str = cmd.getOptionValue("i");
+                str = str.substring(0, str.length() - 4);
+                str = str + "Exceptions" + ".txt";
+                try {
+                    FileWriter file = new FileWriter(str);
+                    file.write(parser.stringExceptions.toString());
+                    file.flush();
+                    file.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
 
@@ -75,6 +102,18 @@ public class Main {
 
                 // запускаем метод, который обходит входную папку и создает выходную папку
                 parser.processFolder(outputFolder);
+
+                //создаем txt файл с ошибками
+                String str = cmd.getOptionValue("i");
+                str = str + "Exceptions" + ".txt";
+                try {
+                    FileWriter file = new FileWriter(str);
+                    file.write(parser.stringExceptions.toString());
+                    file.flush();
+                    file.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }

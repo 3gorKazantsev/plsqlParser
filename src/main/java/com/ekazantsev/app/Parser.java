@@ -25,6 +25,8 @@ public class Parser {
     private PlSqlParser parser = null;
     private ParseTree mainTree = null;
 
+    public StringBuilder stringExceptions = new StringBuilder();
+
     // метод, который обрабатывает входную папку
     public void processFolder(File folder) {
         File[] folderEntries = folder.listFiles();
@@ -110,6 +112,11 @@ public class Parser {
                                 line++;
                             }
                             line++;
+
+                            // записываем строку с ошибкой
+                            stringExceptions.append(inputFile + " | ");
+                            stringExceptions.append("line " + line + " | ");
+                            stringExceptions.append(listStr.get(line) + "\n");
 
                             // удаляем все строки до строки с ошибкой (включительно) из массива со строками SQL файла
                             for (int j = 0; j <= line; j++) {
